@@ -20,20 +20,10 @@ def PowerSpectrum_1D( data: np.ndarray, axis=-1 ):
     return power_spec;
 
 def PowerSpectrum_2D( data, axes=(0, -1) ):
+    data_fft = np.fft.rfft( data, axis=axes[0] ) * 2.0;
+    data_fft = np.fft.ifft( data_fft, axis=axes[1] ) * data.shape[axes[1]];
 
-    data: np.ndarray = np.array( data );
+    power_spec = ( data_fft * data_fft.conj() ) / ( data.shape[axes[0]] * data.shape[axes[1]] ) ** 2.0 / 2;
 
-    Nt = data.shape[axes[0]];
-    Nx = data.shape[axes[1]];
+    return power_spec.real[1:]
 
-    if len( data.shape ) < 2:
-        raise DimensionError( "The array must be 2-dimensional or higher dimensional array" );
-
-    fr = np.fft.fftfreq( Nt, d=1/Nt );
-
-    data_fft: np.ndarray = np.fft.fft( data, axis=axes[0] );
-    data_fft: np.ndarray = np.fft.ifft( data, axis=axes[1] ) * data.shape[axes[1]];
-
-    power_spec: np.ndarray = ( data_fft * data_fft.conj() ).real / ( Nt*Nx )**2;
-
-    return power_spec.real[fr>0];
