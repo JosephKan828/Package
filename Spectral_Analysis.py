@@ -1,45 +1,39 @@
-#This module contains functions for spectral analysis of time series data
 import numpy as np;
 
-class Fourier:
-    def __init__(
-        self,
-        arr: np.ndarray,
-        axes: tuple[int, int] = (-2, -1),
-        ):
-        
-        self.arr   : np.ndarray      = arr;
-        self.axes  : tuple[int, int] = axes;
-        self.shape : tuple[int]      = arr.shape;
-    
-    def fft2d(self):
-        
-        fft: np.ndarray = np.fft.fft(self.arr, axis=self.axes[0]);
-        fft: np.ndarray = np.fft.ifft(fft, axis=self.axes[1]) * self.shape[self.axes[1]];
-        
-        return fft;
-    
-    def ifft2d(self):
-        
-        ifft: np.ndarray = np.fft.ifft(self.arr, axis=self.axes[0]);
-        ifft: np.ndarray = np.fft.fft(ifft, axis=self.axes[1]) / self.shape[self.axes[1]];
-        
-        return ifft;
-    
-class SpectralAnalysis(Fourier):
-    def __init__(
-        self,
-        arr: np.ndarray,
-        axes: tuple[int, int] = (-2, -1)
-    ):
-        super().__init__(arr, axes);
-        self.fft : np.ndarray = self.fft2d();
-        self.ifft: np.ndarray = self.ifft2d();
-    
-    def power_spectrum(
-        self
-        ) -> np.ndarray:
-        ps: np.ndarray = (self.fft * self.ifft.conj()).real / (self.shape[self.axes[0]] * self.shape[self.axes[1]]) * 2;
-        
-        return ps;
-      
+def PowerSpectrum_1D( data: np.ndarray, axis=-1 ):
+
+    data: np.ndarray = np.array( data );
+
+    if len( data.shape ) != 1:
+        raise DimensionError( "The array must be 1-dimensional array." );
+
+    N: int = data.size; # size of 1d data
+
+    fr: np.ndarray = np.fft.fftfreq( N, d=1/N );
+    print( fr )
+    data_fft  : np.ndarray = np.fft.fft( data, axis=axis ); # apply FFT on data
+
+    power_spec: np.ndarray = ( data_fft * data_fft.conj() ) / ( float( len( data ) )**2 ); # Compute power spectrum
+
+    power_spec = power_spec[fr>0] * 2.0    
+
+    return power_spec;
+
+def PowerSpectrum_2D( data, axes=(0, -1) ):
+
+    data: np.ndarray = np.array( data );
+
+    Nt = data.shape[axes[0]];
+    Nx = data.shape[axes[1]];
+
+    if len( data.shape ) < 2:
+        raise DimensionError( "The array must be 2-dimensional or higher dimensional array" );
+
+    fr = np.fft.fftfreq( Nt, d=1/Nt );
+
+    data_fft: np.ndarray = np.fft.fft( data, axis=axes[0] );
+    data_fft: np.ndarray = np.fft.ifft( data, axis=axes[1] ) * data.shape[axes[1]];
+
+    power_spec: np.ndarray = ( data_fft * data_fft.conj() ).real / ( Nt*Nx )**2;
+
+    return power_spec.real[fr>0];
