@@ -20,6 +20,7 @@ def apply_custom_plot_style(fontsize=24, use_latex=False):
     """
     style_dict = {
         "font.size": fontsize,
+        "font.family": "serif",
         "axes.titlesize": fontsize + 8,
         "axes.labelsize": fontsize + 4,
         "xtick.labelsize": fontsize,
