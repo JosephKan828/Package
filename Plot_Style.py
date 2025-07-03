@@ -1,5 +1,5 @@
 # This program is private plot settings for matplotlib.
-import numpy;
+import numpy as np;
 import matplotlib.pyplot as plt;
 
 def apply_custom_plot_style(fontsize=24, use_latex=False):
