@@ -1,7 +1,8 @@
 # This program is private plot settings for matplotlib.
-import numpy as np;
-import matplotlib.pyplot as plt;
-from matplotlib.colors import ListedColormap;
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+
 
 def apply_custom_plot_style(fontsize=24, use_latex=False):
     """
@@ -34,17 +35,19 @@ def apply_custom_plot_style(fontsize=24, use_latex=False):
     }
     plt.rcParams.update(style_dict)
 
+
 def colorlist():
     return [
-    "#000000",  # black
-    "#E69F00",  # orange (colorblind-friendly)
-    "#56B4E9",  # sky blue (colorblind-friendly)
-    "#009E73",  # bluish green (colorblind-friendly)
-    "#F0E442",  # yellow (works well on white)
-    "#0072B2",  # blue (colorblind-friendly)
-    "#D55E00",  # vermilion (colorblind-friendly red-orange)
-    "#CC79A7"   # reddish purple
-];
+        "#000000",  # black
+        "#E69F00",  # orange (colorblind-friendly)
+        "#56B4E9",  # sky blue (colorblind-friendly)
+        "#009E73",  # bluish green (colorblind-friendly)
+        "#F0E442",  # yellow (works well on white)
+        "#0072B2",  # blue (colorblind-friendly)
+        "#D55E00",  # vermilion (colorblind-friendly red-orange)
+        "#CC79A7"   # reddish purple
+    ]
+
 
 def insert_white_into_colormap(cmap_name='RdBu_r', white_range=(-0.1, 0.1), N=256):
     """
@@ -77,4 +80,3 @@ def insert_white_into_colormap(cmap_name='RdBu_r', white_range=(-0.1, 0.1), N=25
 
     new_cmap = ListedColormap(colors)
     return new_cmap
-
